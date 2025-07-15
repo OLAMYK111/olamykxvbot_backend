@@ -1,10 +1,10 @@
 const { getSettings, updateSettings } = require("./settings");
 const { getAnalytics, incrementGptRequest } = require("./analytics");
-const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { OpenAI } = require("openai");
 const { connectToWhatsApp, getQRCode } = require("./whatsapp");
+const express = require("express");
 
 // Call connect function on startup
 connectToWhatsApp();
@@ -19,7 +19,6 @@ app.get("/api/whatsapp/qr", (req, res) => {
 // Load env variables
 dotenv.config();
 
-const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.post("/api/ai-reply", async (req, res) => {
