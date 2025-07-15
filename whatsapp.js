@@ -1,18 +1,5 @@
 const { makeWASocket, useMultiFileAuthState } = require("@whiskeysockets/baileys");
 const qrcode = require("qrcode");
-sock.ev.on("messages.upsert", async ({ messages }) => {
-  const msg = messages[0];
-  if (!msg.message) return;
-
-  const sender = msg.key.remoteJid;
-  const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
-
-  console.log(`📩 Message from ${sender}: ${text}`);
-
-  if (text === "hi") {
-    await sock.sendMessage(sender, { text: "Hello Buddy, I'm OLAMYKxVBOT!" });
-  }
-});
 
 let sock;
 let qrCodeData = "";
@@ -25,8 +12,15 @@ async function connectToWhatsApp() {
     printQRInTerminal: true,
   });
 
+  // 🟢 Moved inside connect function
+  sock.ev.on("messages.upsert", async ({ messages }) => {
+    const msg = messages[0];
+    if (!msg.message) return;
+    console.log("📩 New message:", msg.key.remoteJid, msg.message);
+  });
+
   sock.ev.on("connection.update", (update) => {
-    const { connection, lastDisconnect, qr } = update;
+    const { connection, qr } = update;
 
     if (qr) {
       qrcode.toDataURL(qr, (err, url) => {
