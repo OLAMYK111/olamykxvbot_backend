@@ -4,6 +4,17 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { OpenAI } = require("openai");
+const { connectToWhatsApp, getQRCode } = require("./whatsapp");
+
+// Call connect function on startup
+connectToWhatsApp();
+
+// Add endpoint to fetch QR
+app.get("/api/whatsapp/qr", (req, res) => {
+  const qr = getQRCode();
+  if (!qr) return res.status(404).json({ message: "QR not ready yet" });
+  res.json({ qr });
+});
 
 // Load env variables
 dotenv.config();
