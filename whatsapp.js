@@ -1,5 +1,18 @@
 const { makeWASocket, useMultiFileAuthState } = require("@whiskeysockets/baileys");
 const qrcode = require("qrcode");
+sock.ev.on("messages.upsert", async ({ messages }) => {
+  const msg = messages[0];
+  if (!msg.message) return;
+
+  const sender = msg.key.remoteJid;
+  const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
+
+  console.log(`📩 Message from ${sender}: ${text}`);
+
+  if (text === "hi") {
+    await sock.sendMessage(sender, { text: "Hello Buddy, I'm OLAMYKxVBOT!" });
+  }
+});
 
 let sock;
 let qrCodeData = "";
